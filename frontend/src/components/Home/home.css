@@ -1,0 +1,46 @@
+.container {
+  height: 100vh;
+  padding: 5rem;
+  box-sizing: border-box;
+}
+
+.vector-graphics {
+  filter: drop-shadow(0 40px 10px rgba(0, 0, 0, 0.3));
+  animation: vectorAnimation 1s infinite ease-in-out alternate;
+}
+
+.brandsBanner > svg {
+  transition: all 300ms ease-in-out;
+  cursor: pointer;
+  color: white;
+  font-size: 3rem;
+}
+.brandsBanner > svg:hover {
+  color: rgb(255, 211, 0);
+}
+
+@keyframes vectorAnimation {
+  to {
+    transform: translateY(-10px);
+  }
+}
+.container2 {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container2 video {
+  border: none;
+  width: 60%;
+  border-radius: 5px;
+  outline: none;
+  box-shadow: 0 0 10px rgb(112, 112, 112);
+}
+@media screen and (max-width: 600px) {
+  .container2 video {
+    border: none;
+    width: 100%;
+  }
+}
