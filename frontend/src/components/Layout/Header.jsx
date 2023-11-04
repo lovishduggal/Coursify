@@ -14,9 +14,9 @@ import {
 import { RiDashboardFill, RiLogoutBoxLine, RiMenu5Fill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 
-function LinkButton({ url = '/', title = 'Home' }) {
+function LinkButton({ url = '/', title = 'Home', onClose }) {
   return (
-    <Link to={url}>
+    <Link onClick={onClose} to={url}>
       <Button variant={'ghost'}>{title}</Button>
     </Link>
   );
@@ -28,7 +28,9 @@ function Header() {
   const user = {
     role: 'admin',
   };
-  function logoutHandler() {}
+  function logoutHandler() {
+    onClose();
+  }
   return (
     <>
       <ColorModeSwitcher />
@@ -57,11 +59,19 @@ function Header() {
           </DrawerHeader>
           <DrawerBody>
             <VStack spacing={'4'} alignItems={'flex-start'}>
-              <LinkButton url="/" title="Home" />
-              <LinkButton url="/courses" title="Explore All Courses" />
-              <LinkButton url="/request" title="Request a Course" />
-              <LinkButton url="/contact" title="Contact Us" />
-              <LinkButton url="/about" title="About Us" />
+              <LinkButton onClose={onClose} url="/" title="Home" />
+              <LinkButton
+                onClose={onClose}
+                url="/courses"
+                title="Explore All Courses"
+              />
+              <LinkButton
+                onClose={onClose}
+                url="/request"
+                title="Request a Course"
+              />
+              <LinkButton onClose={onClose} url="/contact" title="Contact Us" />
+              <LinkButton onClose={onClose} url="/about" title="About Us" />
             </VStack>
             <HStack
               justifyContent={'space-evenly'}
@@ -73,7 +83,7 @@ function Header() {
                 <>
                   <VStack>
                     <HStack>
-                      <Link to="/profile">
+                      <Link onClick={onClose} to="/profile">
                         <Button variant={'ghost'} colorScheme="yellow">
                           Profile
                         </Button>
@@ -84,7 +94,7 @@ function Header() {
                       </Button>
                     </HStack>
                     {user && user.role === 'admin' && (
-                      <Link to="/admin/dashboard">
+                      <Link onClick={onClose} to="/admin/dashboard">
                         <Button colorScheme="purple" variant={'ghost'}>
                           {' '}
                           <RiDashboardFill style={{ margin: '4px' }} />{' '}
@@ -96,11 +106,11 @@ function Header() {
                 </>
               ) : (
                 <>
-                  <Link to="/login">
+                  <Link onClick={onClose} to="/login">
                     <Button colorScheme="yellow">Login</Button>
                   </Link>
                   <p>OR</p>
-                  <Link to="/register">
+                  <Link onClick={onClose} to="/register">
                     <Button colorScheme="yellow">Register</Button>
                   </Link>
                 </>
