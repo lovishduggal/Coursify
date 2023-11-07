@@ -198,7 +198,7 @@ asasddasd
 dasdasd, UP 4534534
 India
 Phone: __________
-official.6packprogrammer@gmail.com
+lovishduggal11@gmail.com
 
 `;
 
