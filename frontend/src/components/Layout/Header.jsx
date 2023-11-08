@@ -43,6 +43,7 @@ function Header() {
         position={'fixed'}
         top={'6'}
         left={'6'}
+        zIndex={'1'}
       >
         <RiMenu5Fill />
       </Button>
@@ -51,6 +52,7 @@ function Header() {
         isOpen={isOpen}
         onClose={onClose}
         position={'relative'}
+        zIndex={'2'}
       >
         <DrawerOverlay />
         <DrawerContent>
