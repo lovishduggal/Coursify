@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Grid, Heading, Text, VStack } from '@chakra-ui/react';
+import { Box, Grid, Heading, Spinner, Text, VStack } from '@chakra-ui/react';
 import intro from '../../assets/videos/intro.mp4';
 function CoursePage() {
   const [lectureNumber, setLectureNumber] = useState(0);
