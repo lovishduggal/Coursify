@@ -26,7 +26,7 @@ const Profile = () => {
   const user = {
     name: 'Lovish',
     email: 'lovishduggal11@gmail.com',
-    createdAt: toString(new Date().toISOString()),
+    createdAt: new Date().toISOString(),
     role: 'user',
     subscription: {
       status: 'active',
@@ -60,7 +60,7 @@ const Profile = () => {
         padding="8"
       >
         <VStack>
-          <Avatar boxSize={'48'}  />
+          <Avatar boxSize={'48'} />
           <Button onClick={onOpen} colorScheme={'yellow'} variant="ghost">
             Change Photo
           </Button>
