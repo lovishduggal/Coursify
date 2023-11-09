@@ -19,6 +19,10 @@ import CoursePage from './components/CoursePage/CoursePage';
 import Profile from './components/Profile/Profile';
 import ChangePassword from './components/Profile/ChangePassword';
 import UpdateProfile from './components/Profile/UpdateProfile';
+import Dashboard from './components/Admin/Dashboard/Dashboard';
+import AdminCourses from './components/Admin/AdminCourses/AdminCourses';
+import CreateCourse from './components/Admin/CreateCourse/CreateCourse';
+import Users from './components/Admin/Users/Users';
 function App() {
   return (
     <Router>
@@ -28,7 +32,7 @@ function App() {
         <Route path="/courses" element={<Courses />} />
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/updateprofile" element={<UpdateProfile />} />
-        <Route path="/profile" element={<Profile />} /> 
+        <Route path="/profile" element={<Profile />} />
         <Route path="/course/:id" element={<CoursePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -40,6 +44,12 @@ function App() {
         <Route path="/subscribe" element={<Subscribe />} />
         <Route path="/paymentfail" element={<PaymentFail />} />
         <Route path="/paymentsuccess" element={<PaymentSuccess />} />
+
+        {/*Admin routes */}
+        <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route path="/admin/admincourses" element={<AdminCourses />} />
+        <Route path="/admin/createcourse" element={<CreateCourse />} />
+        <Route path="/admin/users" element={<Users />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
