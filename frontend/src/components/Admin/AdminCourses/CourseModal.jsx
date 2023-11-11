@@ -15,7 +15,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 
 function CourseModal({
@@ -25,14 +25,80 @@ function CourseModal({
   deleteButtonHandler,
   addLectureHandler,
   courseTitle,
-  lectures = [],
+  lectures = [
+    {
+      _id: 1,
+      title: 'react intro',
+      description: 'we will learn fundamentals',
+      lectureId: 'qw2s23s',
+      deleteButtonHandler: { deleteButtonHandler },
+    },
+    {
+      _id: 1,
+      title: 'react intro',
+      description: 'we will learn fundamentals',
+      lectureId: 'qw2s23s',
+      deleteButtonHandler: { deleteButtonHandler },
+    },
+    {
+      _id: 2,
+      title: 'react intro',
+      description: 'we will learn fundamentals',
+      lectureId: 'qw2s23s',
+      deleteButtonHandler: { deleteButtonHandler },
+    },
+    {
+      _id: 3,
+      title: 'react intro',
+      description: 'we will learn fundamentals',
+      lectureId: 'qw2s23s',
+      deleteButtonHandler: { deleteButtonHandler },
+    },
+    {
+      _id: 4,
+      title: 'react intro',
+      description: 'we will learn fundamentals',
+      lectureId: 'qw2s23s',
+      deleteButtonHandler: { deleteButtonHandler },
+    },
+    {
+      _id: 5,
+      title: 'react intro',
+      description: 'we will learn fundamentals',
+      lectureId: 'qw2s23s',
+      deleteButtonHandler: { deleteButtonHandler },
+    },
+  ],
 }) {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [video, setVideo] = useState('');
+  const [videoPrev, setVideoPrev] = useState('');
+
+  function changeVideoHandler(e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onloadend = () => {
+      setVideoPrev(reader.result);
+      setVideo(file);
+    };
+  }
+
+  function handleClose() {
+    setTitle('');
+    setDescription('');
+    setVideo('');
+    setVideoPrev('');
+    onClose();
+  }
   return (
-    <Modal isOpen={isOpen} size={'full'}>
+    <Modal isOpen={isOpen} size={'full'} scrollBehavior="inside">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{courseTitle}</ModalHeader>
-        <ModalCloseButton />
         <ModalBody p="16">
           <Grid templateColumns={['1fr', '3fr 1fr']}>
             <Box px={['0', '16']}>
@@ -41,17 +107,88 @@ function CourseModal({
                 <Heading children={`#${id}`} size="sm" opacity={0.4} />
               </Box>
               <Heading children={'Lectures'} size="lg" />
-              <VideoCard
-                title="react intro"
-                description="we will learn fundamentals"
-                num={1}
-                lectureId="qw2s23s"
-                courseId={id}
-                deleteButtonHandler={deleteButtonHandler}
-              />
+              {lectures.map((item, i) => (
+                <VideoCard
+                  key={i}
+                  title={item.title}
+                  description={item.description}
+                  num={i + 1}
+                  lectureId={item._id}
+                  courseId={id}
+                  deleteButtonHandler={deleteButtonHandler}
+                  // loading={loading}
+                />
+              ))}
+            </Box>
+            <Box>
+              <form
+                onSubmit={e =>
+                  addLectureHandler(e, id, title, description, video)
+                }
+              >
+                <VStack spacing={'4'}>
+                  <Heading
+                    children="Add Lecture"
+                    size={'md'}
+                    textTransform="uppercase"
+                  />
+
+                  <Input
+                    focusBorderColor="purple.300"
+                    placeholder="Title"
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                  />
+                  <Input
+                    focusBorderColor="purple.300"
+                    placeholder="Description"
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                  />
+
+                  <Input
+                    accept="video/mp4"
+                    required
+                    type={'file'}
+                    focusBorderColor="purple.300"
+                    css={{
+                      '&::file-selector-button': {
+                        cursor: 'pointer',
+                        marginLeft: '-10%',
+                        width: '120%',
+                        height: '100%',
+                        color: 'purple',
+                        backgroundColor: 'white',
+                        border: 'none',
+                      },
+                    }}
+                    onChange={changeVideoHandler}
+                  />
+
+                  {videoPrev && (
+                    <video
+                      controlsList="nodownload"
+                      controls
+                      src={videoPrev}
+                    ></video>
+                  )}
+
+                  <Button
+                    // isLoading={loading}
+                    w="full"
+                    colorScheme={'purple'}
+                    type="submit"
+                  >
+                    Upload
+                  </Button>
+                </VStack>
+              </form>
             </Box>
           </Grid>
         </ModalBody>
+        <ModalFooter>
+          <Button onClick={handleClose}>Close</Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
