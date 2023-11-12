@@ -10,5 +10,4 @@ import course from './Routes/courseRoutes.js';
 import user from './Routes/userRoutes.js';
 app.use('/api/v1', course);
 app.use('/api/v1', user);
-
 export default app;
