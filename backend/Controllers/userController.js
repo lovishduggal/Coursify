@@ -150,32 +150,31 @@ export const forgotPassword = catchAsyncError(async (req, res, next) => {
 export const resetPassword = catchAsyncError(async (req, res, next) => {
     const { token } = req.params;
 
-    // const resetPasswordToken = crypto
-    //     .createHash('sha256')
-    //     .update(token)
-    //     .digest('hex');
+    const resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(token)
+        .digest('hex');
 
-    // const user = await User.findOne({
-    //     resetPasswordToken,
-    //     resetPasswordExpire: {
-    //         $gt: Date.now(),
-    //     },
-    // });
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: {
+            $gt: Date.now(),
+        },
+    });
 
-    // if (!user)
-    //     return next(
-    //         new ErrorHandler('Token is invalid or has been expired', 401)
-    //     );
+    if (!user)
+        return next(
+            new ErrorHandler('Token is invalid or has been expired', 401)
+        );
 
-    // user.password = req.body.password;
-    // user.resetPasswordToken = undefined;
-    // user.resetPasswordExpire = undefined;
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
 
-    // await user.save();
+    await user.save();
 
     res.status(200).json({
         success: true,
         message: 'Password Changed Successfully',
-        token,
     });
 });
