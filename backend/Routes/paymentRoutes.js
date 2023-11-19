@@ -1,5 +1,5 @@
 import express from 'express';
-import { isAuthenticated } from '../Middlewares/auth.js';
+import { authorizeSubscribers, isAuthenticated } from '../Middlewares/auth.js';
 import {
     buySubscription,
     cancelSubscription,
@@ -12,6 +12,8 @@ const router = express.Router();
 router.route('/subscribe').post(isAuthenticated, buySubscription);
 router.route('/paymentverification').post(isAuthenticated, paymentVerification);
 router.route('/razorpaykey').get(getRazorPayKey);
-router.route('/subscribe/cancel').delete(isAuthenticated, cancelSubscription);
+router
+    .route('/subscribe/cancel')
+    .delete(isAuthenticated, authorizeSubscribers, cancelSubscription);
 
 export default router;
