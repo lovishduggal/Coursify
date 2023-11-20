@@ -8,7 +8,7 @@ import other from './Routes/otherRoutes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 config({
-    path: './config/.env',
+    path: './Config/.env',
 });
 const app = express();
 
