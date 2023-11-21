@@ -23,10 +23,13 @@ import Dashboard from './components/Admin/Dashboard/Dashboard';
 import AdminCourses from './components/Admin/AdminCourses/AdminCourses';
 import CreateCourse from './components/Admin/CreateCourse/CreateCourse';
 import Users from './components/Admin/Users/Users';
+import { useSelector } from 'react-redux';
+import { Toaster } from 'react-hot-toast';
 function App() {
+  const { isAuthenticated, user } = useSelector(state => state.user);
   return (
     <Router>
-      <Header />
+      <Header isAuthenticated={isAuthenticated} user={user} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/courses" element={<Courses />} />
@@ -53,6 +56,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
+      <Toaster />
     </Router>
   );
 }

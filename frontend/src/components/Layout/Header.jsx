@@ -22,12 +22,8 @@ function LinkButton({ url = '/', title = 'Home', onClose }) {
   );
 }
 
-function Header() {
+function Header({ isAuthenticated = false, user }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const isAuthenticated = true;
-  const user = {
-    role: 'admin',
-  };
   function logoutHandler() {
     onClose();
   }

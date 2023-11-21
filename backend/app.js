@@ -7,6 +7,7 @@ import payment from './Routes/paymentRoutes.js';
 import other from './Routes/otherRoutes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import morgan from 'morgan';
 config({
     path: './Config/.env',
 });
@@ -22,6 +23,7 @@ app.use(
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
     })
 );
+app.use(morgan('dev'));
 
 app.use('/api/v1', course);
 app.use('/api/v1', user);
