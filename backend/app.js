@@ -28,5 +28,9 @@ app.use('/api/v1', user);
 app.use('/api/v1', payment);
 app.use('/api/v1', other);
 
+app.get('/', (req, res) => {
+    return res.send('<h1>Server is working!!</h1>');
+});
+
 app.use(ErrorMiddleware);
 export default app;
