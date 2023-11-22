@@ -10,12 +10,10 @@ const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
 
 root.render(
-  <StrictMode>
-    <Provider store={store}>
-      <ChakraProvider theme={theme}>
-        <ColorModeScript />
-        <App />
-      </ChakraProvider>
-    </Provider>
-  </StrictMode>
+  <Provider store={store}>
+    <ChakraProvider theme={theme}>
+      <ColorModeScript />
+      <App />
+    </ChakraProvider>
+  </Provider>
 );

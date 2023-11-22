@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home/Home';
 import Header from './components/Layout/Header';
@@ -23,10 +23,16 @@ import Dashboard from './components/Admin/Dashboard/Dashboard';
 import AdminCourses from './components/Admin/AdminCourses/AdminCourses';
 import CreateCourse from './components/Admin/CreateCourse/CreateCourse';
 import Users from './components/Admin/Users/Users';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
+import { ProtectedRoute } from 'protected-route-react';
+import { loadUser } from './redux/slices/userSlice';
 function App() {
   const { isAuthenticated, user } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
   return (
     <Router>
       <Header isAuthenticated={isAuthenticated} user={user} />
@@ -35,9 +41,26 @@ function App() {
         <Route path="/courses" element={<Courses />} />
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/updateprofile" element={<UpdateProfile />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/course/:id" element={<CoursePage />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <ProtectedRoute
+              isAuthenticated={!isAuthenticated}
+              redirect="/profile"
+            >
+              <Login />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/register" element={<Register />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword/:token" element={<ResetPassword />} />
