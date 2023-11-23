@@ -23,6 +23,22 @@ export const login = createAsyncThunk('user/login', async data => {
   }
 });
 
+export const register = createAsyncThunk('user/register', async data => {
+  try {
+    const response = axiosInstance.post('/register', data);
+    toast.promise(response, {
+      loading: 'Registering user...',
+      success: response => {
+        return response?.data?.message;
+      },
+      error: 'Failed to register the user',
+    });
+    return (await response).data;
+  } catch (error) {
+    toast.error(error.response.data.message);
+  }
+});
+
 export const loadUser = createAsyncThunk('user/load', async () => {
   try {
     const response = axiosInstance.get('/me');
@@ -32,6 +48,22 @@ export const loadUser = createAsyncThunk('user/load', async () => {
         return response?.data?.message;
       },
       error: 'Failed to Load the user',
+    });
+    return (await response).data;
+  } catch (error) {
+    toast.error(error.response.data.message);
+  }
+});
+
+export const logout = createAsyncThunk('user/logout', async () => {
+  try {
+    const response = axiosInstance.get('/logout');
+    toast.promise(response, {
+      loading: 'Logging out...',
+      success: response => {
+        return response?.data?.message;
+      },
+      error: 'Failed to Logged out',
     });
     return (await response).data;
   } catch (error) {
@@ -50,7 +82,14 @@ const userSlice = createSlice({
         state.isAuthenticated = true;
       })
       .addCase(loadUser.fulfilled, (state, action) => {
-        console.log(action);
+        state.user = action?.payload?.user;
+        if (state.user) state.isAuthenticated = true;
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.user = {};
+        state.isAuthenticated = false;
+      })
+      .addCase(register.fulfilled, (state, action) => {
         state.user = action?.payload?.user;
         state.isAuthenticated = true;
       });

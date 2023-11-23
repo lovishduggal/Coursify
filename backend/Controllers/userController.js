@@ -31,6 +31,8 @@ export const register = catchAsyncError(async (req, res, next) => {
         },
     });
 
+    user.password = undefined;
+
     sendToken(res, user, 'Registered Successfully', 201);
 });
 
@@ -60,7 +62,7 @@ export const logout = catchAsyncError(async (req, res, next) => {
         .cookie('token', null, {
             expires: new Date(Date.now()),
             httpOnly: true,
-            // secure: true,
+            secure: true,
             sameSite: 'none',
         })
         .json({

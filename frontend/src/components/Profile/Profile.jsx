@@ -20,28 +20,13 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const Profile = () => {
-  const user = {
-    name: 'Lovish',
-    email: 'lovishduggal11@gmail.com',
-    createdAt: new Date().toISOString(),
-    role: 'user',
-    subscription: {
-      status: 'active',
-    },
-    playlist: [
-      {
-        course: '1',
-        poster:
-          'https://images.unsplash.com/photo-1593720213428-28a5b9e94613?auto=format&fit=crop&q=60&w=400&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2ViJTIwZGV2ZWxvcG1lbnR8ZW58MHx8MHx8fDA%3D',
-      },
-    ],
-  };
+  const { user } = useSelector(state => state.user);
 
   function removeFromPlaylistHandler(id) {}
-
   const changeImageSubmitHandler = async (e, image) => {
     e.preventDefault();
   };
@@ -60,7 +45,7 @@ const Profile = () => {
         padding="8"
       >
         <VStack>
-          <Avatar boxSize={'48'} />
+          <Avatar src={user.avatar.url} boxSize={'48'} />
           <Button onClick={onOpen} colorScheme={'yellow'} variant="ghost">
             Change Photo
           </Button>
@@ -82,7 +67,7 @@ const Profile = () => {
           {user.role !== 'admin' && (
             <HStack>
               <Text children="Subscription" fontWeight={'bold'} />
-              {user.subscription && user.subscription.status === 'active' ? (
+              {user?.subscription && user?.subscription?.status === 'active' ? (
                 <Button color={'yellow.500'} variant="unstyled">
                   Cancel Subscription
                 </Button>

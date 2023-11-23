@@ -13,6 +13,8 @@ import {
 } from '@chakra-ui/react';
 import { RiDashboardFill, RiLogoutBoxLine, RiMenu5Fill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/slices/userSlice.js';
 
 function LinkButton({ url = '/', title = 'Home', onClose }) {
   return (
@@ -22,9 +24,12 @@ function LinkButton({ url = '/', title = 'Home', onClose }) {
   );
 }
 
-function Header({ isAuthenticated = false, user }) {
+function Header() {
+  const { isAuthenticated = false, user } = useSelector(state => state.user);
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const dispatch = useDispatch();
   function logoutHandler() {
+    dispatch(logout());
     onClose();
   }
   return (

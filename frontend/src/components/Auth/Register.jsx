@@ -10,6 +10,8 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { register } from '../../redux/slices/userSlice';
+import { useDispatch } from 'react-redux';
 
 function Register() {
   const [email, setEmail] = useState('');
@@ -17,6 +19,7 @@ function Register() {
   const [name, setName] = useState('');
   const [imagePrev, setImagePrev] = useState('');
   const [image, setImage] = useState('');
+  const dispatch = useDispatch();
 
   function changeImageHandler(e) {
     const file = e.target.files[0];
@@ -27,11 +30,23 @@ function Register() {
       setImage(file);
     };
   }
+
+  function submitHandler(e) {
+    e.preventDefault();
+
+    const form = new FormData();
+    form.append('name', name);
+    form.append('email', email);
+    form.append('password', password);
+    form.append('file', image);
+
+    dispatch(register(form));
+  }
   return (
     <Container h={'95vh'}>
       <VStack h="full" justifyContent={'center'} spacing={'6'}>
         <Heading textTransform={'uppercase'} children="Register" />
-        <form style={{ width: '100%' }}>
+        <form onSubmit={submitHandler} style={{ width: '100%' }}>
           <Box
             marginY={'4'}
             display={'flex'}
@@ -82,10 +97,8 @@ function Register() {
               required
               accept="image/*"
               id="chooseAvatar"
-              placeholder="Enter your password"
               type="file"
               focusBorderColor="yellow.500"
-              value={password}
               onChange={changeImageHandler}
               css={{
                 '&::file-selector-button': {
