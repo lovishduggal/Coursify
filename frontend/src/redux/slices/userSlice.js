@@ -71,6 +71,63 @@ export const logout = createAsyncThunk('user/logout', async () => {
   }
 });
 
+export const updateProfile = createAsyncThunk(
+  'user/updateprofile',
+  async data => {
+    try {
+      const response = axiosInstance.put('/updateprofile', data);
+      toast.promise(response, {
+        loading: 'Updating the user profile',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to update  the user profile',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
+export const changePassword = createAsyncThunk(
+  'user/changepassword',
+  async data => {
+    try {
+      const response = axiosInstance.put('/changepassword', data);
+      toast.promise(response, {
+        loading: 'Changing the user password',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to change the user password',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
+export const updateProfilePicture = createAsyncThunk(
+  'user/updateprofilepicture',
+  async data => {
+    try {
+      const response = axiosInstance.put('/updateprofilepicture', data);
+      toast.promise(response, {
+        loading: 'Updating the user profile picture',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to update  the user profile picture',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -93,6 +150,10 @@ const userSlice = createSlice({
         state.user = action?.payload?.user;
         state.isAuthenticated = true;
       });
+    // .addCase(updateprofile.fulfilled, (state, action) => {
+    //   state.user = action?.payload?.user;
+    //   state.isAuthenticated = true;
+    // });
   },
 });
 export default userSlice.reducer;
