@@ -1,8 +1,16 @@
 import { Button, Container, Heading, Input, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { forgotPassword } from '../../redux/slices/userSlice';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
+  const dispatch = useDispatch();
+
+  function submitHandler(e) {
+    e.preventDefault();
+    dispatch(forgotPassword(email));
+  }
   return (
     <Container
       py="16"
@@ -11,7 +19,7 @@ function ForgotPassword() {
       justifyContent={'center'}
       alignItems={'center'}
     >
-      <form>
+      <form onSubmit={submitHandler}>
         <Heading
           children="Forgot Password"
           my="14"

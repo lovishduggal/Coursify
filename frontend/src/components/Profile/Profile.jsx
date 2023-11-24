@@ -20,18 +20,23 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { loadUser, updateProfilePicture } from '../../redux/slices/userSlice';
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const { user } = useSelector(state => state.user);
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   function removeFromPlaylistHandler(id) {}
-  const changeImageSubmitHandler = async (e, image) => {
+  async function changeImageSubmitHandler(e, image) {
     e.preventDefault();
-  };
-
-  const { isOpen, onClose, onOpen } = useDisclosure();
+    const form = new FormData();
+    form.append('file', image);
+    await dispatch(updateProfilePicture(form));
+    dispatch(loadUser());
+  }
 
   return (
     <Container minH={'95vh'} maxW="container.lg" py="8">

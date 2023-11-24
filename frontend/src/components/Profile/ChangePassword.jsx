@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
 import { Button, Container, Heading, Input, VStack } from '@chakra-ui/react';
+import { useDispatch } from 'react-redux';
+import { changePassword, loadUser } from '../../redux/slices/userSlice';
+import { useNavigate } from 'react-router-dom';
 function ChangePassword() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+
+  function submitHandler(e) {
+    e.preventDefault();
+    dispatch(changePassword({ oldPassword, newPassword }));
+    dispatch(loadUser());
+    navigate('/profile');
+  }
   return (
     <Container py="16" minH={'90vh'}>
-      <form>
+      <form onSubmit={submitHandler}>
         <Heading
           textTransform={'uppercase'}
           children="Change Password"

@@ -9,10 +9,12 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { categories } from '../../Contants/courses';
 import { FaHeading } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCourses } from '../../redux/slices/courseSlice';
 
 function Course({
   views,
@@ -74,6 +76,12 @@ function Course({
 function Courses() {
   const [keyword, setKeyword] = useState('');
   const [category, setCategory] = useState('');
+  const dispatch = useDispatch();
+  const { courses } = useSelector(state => state.course);
+
+  useEffect(() => {
+    dispatch(getAllCourses({ keyword, category }));
+  }, [dispatch, keyword, category]);
 
   function addToPlaylistHandler() {}
 
@@ -108,54 +116,20 @@ function Courses() {
         justifyContent={['flex-start', 'space-evenly']}
         alignItems={['center', 'flex-end']}
       >
-        <Course
-          title={'web-dev'}
-          description={'description'}
-          views={'22'}
-          imageSrc={
-            'https://images.unsplash.com/photo-1593720213428-28a5b9e94613?auto=format&fit=crop&q=60&w=400&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2ViJTIwZGV2ZWxvcG1lbnR8ZW58MHx8MHx8fDA%3D'
-          }
-          id={'1'}
-          creator={'lovish'}
-          lectureCount={'7'}
-          addToPlaylistHandler={addToPlaylistHandler}
-        />
-        <Course
-          title={'web-dev'}
-          description={'description'}
-          views={'22'}
-          imageSrc={
-            'https://images.unsplash.com/photo-1593720213428-28a5b9e94613?auto=format&fit=crop&q=60&w=400&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2ViJTIwZGV2ZWxvcG1lbnR8ZW58MHx8MHx8fDA%3D'
-          }
-          id={'1'}
-          creator={'lovish'}
-          lectureCount={'7'}
-          addToPlaylistHandler={addToPlaylistHandler}
-        />
-        <Course
-          title={'web-dev'}
-          description={'description'}
-          views={'22'}
-          imageSrc={
-            'https://images.unsplash.com/photo-1593720213428-28a5b9e94613?auto=format&fit=crop&q=60&w=400&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2ViJTIwZGV2ZWxvcG1lbnR8ZW58MHx8MHx8fDA%3D'
-          }
-          id={'1'}
-          creator={'lovish'}
-          lectureCount={'7'}
-          addToPlaylistHandler={addToPlaylistHandler}
-        />
-        <Course
-          title={'web-dev'}
-          description={'description'}
-          views={'22'}
-          imageSrc={
-            'https://images.unsplash.com/photo-1593720213428-28a5b9e94613?auto=format&fit=crop&q=60&w=400&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2ViJTIwZGV2ZWxvcG1lbnR8ZW58MHx8MHx8fDA%3D'
-          }
-          id={'1'}
-          creator={'lovish'}
-          lectureCount={'7'}
-          addToPlaylistHandler={addToPlaylistHandler}
-        />
+        {courses &&
+          courses.map(item => (
+            <Course
+              key={item._id}
+              title={item.title}
+              description={item.description}
+              views={item.views}
+              imageSrc={item.poster.url}
+              id={item._id}
+              creator={item.createdBy}
+              lectureCount={item.numOfVideos}
+              addToPlaylistHandler={addToPlaylistHandler}
+            />
+          ))}
       </Stack>
     </Container>
   );

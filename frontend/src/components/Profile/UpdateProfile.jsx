@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Container, Heading, Input, VStack } from '@chakra-ui/react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loadUser, updateProfile } from '../../redux/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 function UpdateProfile() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const { user } = useSelector(state => state.user);
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

@@ -159,7 +159,6 @@ export const forgotPassword = catchAsyncError(async (req, res, next) => {
 
 export const resetPassword = catchAsyncError(async (req, res, next) => {
     const { token } = req.params;
-
     const resetPasswordToken = crypto
         .createHash('sha256')
         .update(token)

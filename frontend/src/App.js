@@ -36,7 +36,7 @@ function App() {
   }, [dispatch]);
   return (
     <Router>
-      {user ? (
+      {true ? (
         <>
           <Header isAuthenticated={isAuthenticated} user={user} />
           <Routes>
@@ -89,8 +89,28 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
-            <Route path="/resetpassword/:token" element={<ResetPassword />} />
+            <Route
+              path="/forgotpassword"
+              element={
+                <ProtectedRoute
+                  isAuthenticated={!isAuthenticated}
+                  redirect="/profile"
+                >
+                  <ForgotPassword />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/resetpassword/:token"
+              element={
+                <ProtectedRoute
+                  isAuthenticated={!isAuthenticated}
+                  redirect="/profile"
+                >
+                  <ResetPassword />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/contact" element={<Contact />} />
             <Route path="/request" element={<Request />} />
             <Route path="/about" element={<About />} />
