@@ -17,7 +17,6 @@ export const getAllCourses = createAsyncThunk(
       toast.promise(response, {
         loading: 'Fetching the courses',
         success: response => {
-          console.log(response?.data?.message);
           return response?.data?.message;
         },
         error: 'Failed to fetch the courses',
@@ -35,7 +34,6 @@ const courseSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getAllCourses.fulfilled, (state, action) => {
-      console.log(action);
       state.courses = action.payload.courses;
     });
   },

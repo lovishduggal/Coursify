@@ -15,6 +15,8 @@ import { FaHeading } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCourses } from '../../redux/slices/courseSlice';
+import useDebounce from '../../Hooks/useDebounce';
+import { addToPlaylist } from '../../redux/slices/userSlice';
 
 function Course({
   views,
@@ -78,19 +80,23 @@ function Courses() {
   const [category, setCategory] = useState('');
   const dispatch = useDispatch();
   const { courses } = useSelector(state => state.course);
+  const debounce = useDebounce;
 
   useEffect(() => {
     dispatch(getAllCourses({ keyword, category }));
   }, [dispatch, keyword, category]);
 
-  function addToPlaylistHandler() {}
+   function addToPlaylistHandler(id) {
+    dispatch(addToPlaylist({ id }));
+  }
 
   return (
     <Container minH={'95vh'} maxW="container.lg" paddingY={'8'}>
       <Heading children="All Courses" m={'8'} />
       <Input
-        value={keyword}
-        onChange={e => setKeyword(e.target.value)}
+        onChange={e => {
+          debounce(e, setKeyword);
+        }}
         type={'text'}
         placeholder={'Search a course...'}
         focusBorderColor="yellow.500"
@@ -116,7 +122,7 @@ function Courses() {
         justifyContent={['flex-start', 'space-evenly']}
         alignItems={['center', 'flex-end']}
       >
-        {courses &&
+        {courses.length > 0 ? (
           courses.map(item => (
             <Course
               key={item._id}
@@ -129,7 +135,10 @@ function Courses() {
               lectureCount={item.numOfVideos}
               addToPlaylistHandler={addToPlaylistHandler}
             />
-          ))}
+          ))
+        ) : (
+          <Heading children={'Couse Not Found'} />
+        )}
       </Stack>
     </Container>
   );

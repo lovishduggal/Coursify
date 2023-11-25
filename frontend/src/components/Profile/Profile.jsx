@@ -23,13 +23,17 @@ import { RiDeleteBin7Fill } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { loadUser, updateProfilePicture } from '../../redux/slices/userSlice';
+import { removeFromPlaylist } from '../../redux/slices/userSlice';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.user);
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  function removeFromPlaylistHandler(id) {}
+  function removeFromPlaylistHandler(id) {
+    dispatch(removeFromPlaylist({ id }));
+  }
+
   async function changeImageSubmitHandler(e, image) {
     e.preventDefault();
     const form = new FormData();
@@ -50,7 +54,7 @@ const Profile = () => {
         padding="8"
       >
         <VStack>
-          <Avatar src={user.avatar.url} boxSize={'48'} />
+          <Avatar src={user?.avatar?.url} boxSize={'48'} />
           <Button onClick={onOpen} colorScheme={'yellow'} variant="ghost">
             Change Photo
           </Button>
@@ -59,17 +63,17 @@ const Profile = () => {
         <VStack spacing={'4'} alignItems={['center', 'flex-start']}>
           <HStack>
             <Text children="Name" fontWeight={'bold'} />
-            <Text children={user.name} />
+            <Text children={user?.name} />
           </HStack>{' '}
           <HStack>
             <Text children="Email" fontWeight={'bold'} />
-            <Text children={user.email} />
+            <Text children={user?.email} />
           </HStack>
           <HStack>
             <Text children="CreatedAt" fontWeight={'bold'} />
-            <Text children={user.createdAt.split('T')[0]} />
+            <Text children={user?.createdAt.split('T')[0]} />
           </HStack>
-          {user.role !== 'admin' && (
+          {user?.role !== 'admin' && (
             <HStack>
               <Text children="Subscription" fontWeight={'bold'} />
               {user?.subscription && user?.subscription?.status === 'active' ? (
@@ -97,7 +101,7 @@ const Profile = () => {
 
       <Heading children="Playlist" size={'md'} my="8" />
 
-      {user.playlist.length > 0 && (
+      {user?.playlist?.length > 0 && (
         <Stack
           direction={['column', 'row']}
           alignItems={'center'}

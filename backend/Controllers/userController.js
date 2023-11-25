@@ -204,6 +204,7 @@ export const addToPlaylist = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: 'Added to playlist',
+        user,
     });
 });
 
@@ -221,6 +222,7 @@ export const removeFromPlaylist = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: 'Removed From Playlist',
+        user,
     });
 });
 

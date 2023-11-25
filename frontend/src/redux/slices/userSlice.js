@@ -170,6 +170,45 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
+export const addToPlaylist = createAsyncThunk(
+  'user/addtoplaylist',
+  async data => {
+    try {
+      const response = axiosInstance.post(`/addtoplaylist`, data);
+      toast.promise(response, {
+        loading: 'Adding to the playlist',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to add the course to the playlist',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
+export const removeFromPlaylist = createAsyncThunk(
+  'user/removefromplaylist',
+  async data => {
+    const { id } = data;
+    try {
+      const response = axiosInstance.delete(`/removefromplaylist?id=${id}`);
+      toast.promise(response, {
+        loading: 'Removing from  the playlist',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to remove the course to the playlist',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -191,11 +230,13 @@ const userSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.user = action?.payload?.user;
         state.isAuthenticated = true;
+      })
+      .addCase(addToPlaylist.fulfilled, (state, action) => {
+        state.user = action?.payload?.user;
+      })
+      .addCase(removeFromPlaylist.fulfilled, (state, action) => {
+        state.user = action?.payload?.user;
       });
-    // .addCase(updateprofile.fulfilled, (state, action) => {
-    //   state.user = action?.payload?.user;
-    //   state.isAuthenticated = true;
-    // });
   },
 });
 export default userSlice.reducer;
