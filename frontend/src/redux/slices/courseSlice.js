@@ -68,6 +68,58 @@ export const createCourse = createAsyncThunk(
   }
 );
 
+export const deleteCourse = createAsyncThunk(
+  'user/admin/deletecourse',
+  async data => {
+    const { id } = data;
+    try {
+      const response = axiosInstance.delete(`/course/${id}`);
+      toast.promise(response, {
+        loading: 'deleting.....',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to delete the course ',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
+export const addLecture = createAsyncThunk(
+  'user/admin/addlecture',
+  async data => {
+    try {
+      const { id, title, description, file } = data;
+      console.log('jii', id, title, description, file);
+      const response = axiosInstance.post(
+        `/course/${id}`,
+        {
+          title,
+          description,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      toast.promise(response, {
+        loading: 'Adding.....',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to add the lecture',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
 const courseSlice = createSlice({
   name: 'course',
   initialState,
@@ -75,14 +127,19 @@ const courseSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getAllCourses.fulfilled, (state, action) => {
-        state.courses = action.payload.courses;
+        state.courses = action?.payload?.courses;
       })
       .addCase(getCourseLectures.fulfilled, (state, action) => {
         state.lectures = action?.payload?.lectures;
       })
       .addCase(createCourse.fulfilled, (state, action) => {
-        console.log(action);
         state.courses = action?.payload?.courses;
+      })
+      .addCase(deleteCourse.fulfilled, (state, action) => {
+        state.courses = action?.payload?.courses;
+      })
+      .addCase(addLecture.fulfilled, (state, action) => {
+        state.lectures = action?.payload?.lectures;
       });
   },
 });

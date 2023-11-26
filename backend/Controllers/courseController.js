@@ -72,6 +72,7 @@ export const getCourseLectures = catchAsyncError(async (req, res, next) => {
 export const addLecture = catchAsyncError(async (req, res, next) => {
     const { id } = req.params;
     const { title, description } = req.body;
+    console.log(id, title, description, req.file);
 
     const course = await Course.findById(id);
     if (!course) return next(new ErrorHandler('Course not found', 404));
@@ -96,6 +97,7 @@ export const addLecture = catchAsyncError(async (req, res, next) => {
     return res.status(200).json({
         success: true,
         message: 'Lecture added in Course',
+        lectures: course.lectures,
     });
 });
 
@@ -145,6 +147,7 @@ export const deleteLecture = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: 'Lecture Deleted Successfully',
+        courses: await Course.find({}),
     });
 });
 

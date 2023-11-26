@@ -15,15 +15,25 @@ import {
   Tr,
   useDisclosure,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../Sidebar';
 import cursor from '../../../assets/images/cursor.png';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import CourseModal from './CourseModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCourseLectures } from '../../../redux/slices/courseSlice';
+import {
+  addLecture,
+  deleteCourse,
+  getAllCourses,
+  getCourseLectures,
+} from '../../../redux/slices/courseSlice';
+import { useEffect } from 'react';
 function AdminCourses() {
   const dispatch = useDispatch();
+  const { courses, lectures } = useSelector(state => state.course);
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const [courseId, setCourseId] = useState('');
+  const [courseTitle, setCourseTitle] = useState('');
   const users = [
     {
       _id: '1',
@@ -35,17 +45,25 @@ function AdminCourses() {
       },
     },
   ];
-  const { courses } = useSelector(state => state.course);
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  async function coureDetailsHandler(id) {
+  async function coureDetailsHandler(id, title) {
     await dispatch(getCourseLectures({ id }));
     onOpen();
+    setCourseId(id);
+    setCourseTitle(title);
   }
-  function deleteButtonHandler(userId) {}
+  async function deleteButtonHandler(id) {
+    await dispatch(deleteCourse({ id }));
+  }
   function deleteLectureButtonHandler(courseId, lectureId) {}
-  function addLectureHandler(e, courseId, title, description, video) {
+  async function addLectureHandler(e, id, title, description, video) {
     e.preventDefault();
+    await dispatch(addLecture({ id, title, description, file: video }));
   }
+  useEffect(() => {
+    (async () => {
+      await dispatch(getAllCourses({ keyword: '', category: '' }));
+    })();
+  }, [dispatch]);
   return (
     <Grid
       css={{
@@ -78,7 +96,7 @@ function AdminCourses() {
             </Thead>
             <Tbody>
               {users &&
-                courses.map(item => (
+                courses?.map(item => (
                   <Row
                     coureDetailsHandler={coureDetailsHandler}
                     deleteButtonHandler={deleteButtonHandler}
@@ -92,12 +110,11 @@ function AdminCourses() {
         <CourseModal
           isOpen={isOpen}
           onClose={onClose}
-          id={'hdu86bs'}
-          courseTitle={'react'}
+          id={courseId}
+          courseTitle={courseTitle}
           deleteButtonHandler={deleteLectureButtonHandler}
           addLectureHandler={addLectureHandler}
-          // lectures={lectures}
-          // loading={loading}
+          lectures={lectures}
         />
       </Box>
       <Sidebar />
@@ -107,7 +124,7 @@ function AdminCourses() {
 
 export default AdminCourses;
 
-function Row({ item, coureDetailsHandler, deleteButtonHandler, loading }) {
+function Row({ item, coureDetailsHandler, deleteButtonHandler }) {
   return (
     <Tr>
       <Td>#{item._id}</Td>
@@ -128,7 +145,6 @@ function Row({ item, coureDetailsHandler, deleteButtonHandler, loading }) {
             onClick={() => coureDetailsHandler(item._id, item.title)}
             variant={'outline'}
             color="purple.500"
-            isLoading={loading}
           >
             View Lectures
           </Button>
@@ -136,7 +152,6 @@ function Row({ item, coureDetailsHandler, deleteButtonHandler, loading }) {
           <Button
             onClick={() => deleteButtonHandler(item._id)}
             color={'purple.600'}
-            isLoading={loading}
           >
             <RiDeleteBin7Fill />
           </Button>

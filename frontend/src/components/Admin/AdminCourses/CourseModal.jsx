@@ -25,50 +25,7 @@ function CourseModal({
   deleteButtonHandler,
   addLectureHandler,
   courseTitle,
-  lectures = [
-    {
-      _id: 1,
-      title: 'react intro',
-      description: 'we will learn fundamentals',
-      lectureId: 'qw2s23s',
-      deleteButtonHandler: { deleteButtonHandler },
-    },
-    {
-      _id: 1,
-      title: 'react intro',
-      description: 'we will learn fundamentals',
-      lectureId: 'qw2s23s',
-      deleteButtonHandler: { deleteButtonHandler },
-    },
-    {
-      _id: 2,
-      title: 'react intro',
-      description: 'we will learn fundamentals',
-      lectureId: 'qw2s23s',
-      deleteButtonHandler: { deleteButtonHandler },
-    },
-    {
-      _id: 3,
-      title: 'react intro',
-      description: 'we will learn fundamentals',
-      lectureId: 'qw2s23s',
-      deleteButtonHandler: { deleteButtonHandler },
-    },
-    {
-      _id: 4,
-      title: 'react intro',
-      description: 'we will learn fundamentals',
-      lectureId: 'qw2s23s',
-      deleteButtonHandler: { deleteButtonHandler },
-    },
-    {
-      _id: 5,
-      title: 'react intro',
-      description: 'we will learn fundamentals',
-      lectureId: 'qw2s23s',
-      deleteButtonHandler: { deleteButtonHandler },
-    },
-  ],
+  lectures,
 }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -107,7 +64,7 @@ function CourseModal({
                 <Heading children={`#${id}`} size="sm" opacity={0.4} />
               </Box>
               <Heading children={'Lectures'} size="lg" />
-              {lectures.map((item, i) => (
+              {lectures?.map((item, i) => (
                 <VideoCard
                   key={i}
                   title={item.title}
@@ -116,7 +73,6 @@ function CourseModal({
                   lectureId={item._id}
                   courseId={id}
                   deleteButtonHandler={deleteButtonHandler}
-                  // loading={loading}
                 />
               ))}
             </Box>
@@ -173,12 +129,7 @@ function CourseModal({
                     ></video>
                   )}
 
-                  <Button
-                    // isLoading={loading}
-                    w="full"
-                    colorScheme={'purple'}
-                    type="submit"
-                  >
+                  <Button w="full" colorScheme={'purple'} type="submit">
                     Upload
                   </Button>
                 </VStack>
