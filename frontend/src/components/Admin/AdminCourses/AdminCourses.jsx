@@ -20,7 +20,10 @@ import Sidebar from '../Sidebar';
 import cursor from '../../../assets/images/cursor.png';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import CourseModal from './CourseModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCourseLectures } from '../../../redux/slices/courseSlice';
 function AdminCourses() {
+  const dispatch = useDispatch();
   const users = [
     {
       _id: '1',
@@ -32,21 +35,10 @@ function AdminCourses() {
       },
     },
   ];
-  const courses = [
-    {
-      _id: '1',
-      poster: {
-        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPP-OxEfDnAdyFdbYlGLG8F0rBKxH5yOTKXfOLCT1M7A&s',
-      },
-      title: 'web-dev',
-      category: 'development',
-      views: 12,
-      createdBy: 'Lovish',
-      numOfVideos: 2,
-    },
-  ];
+  const { courses } = useSelector(state => state.course);
   const { isOpen, onClose, onOpen } = useDisclosure();
-  function coureDetailsHandler(userId) {
+  async function coureDetailsHandler(id) {
+    await dispatch(getCourseLectures({ id }));
     onOpen();
   }
   function deleteButtonHandler(userId) {}

@@ -50,12 +50,12 @@ export const createCourse = catchAsyncError(async (req, res, next) => {
     return res.status(201).json({
         success: true,
         message: 'Course Created Successfully. You can add lectures now.',
+        courses: await Course.find({}),
     });
 });
 
 export const getCourseLectures = catchAsyncError(async (req, res, next) => {
     const course = await Course.findById(req.params.id);
-
     if (!course) return next(new ErrorHandler('Course not found', 404));
 
     course.views += 1;
@@ -65,6 +65,7 @@ export const getCourseLectures = catchAsyncError(async (req, res, next) => {
     return res.status(200).json({
         success: true,
         lectures: course.lectures,
+        message: 'Lectures fetched successfully',
     });
 });
 

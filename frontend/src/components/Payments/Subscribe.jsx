@@ -23,11 +23,13 @@ function Subscribe() {
     const {
       data: { key },
     } = await axiosInstance.get(`/razorpaykey`);
-    console.log(key);
+
     setKey(key);
+
     const { payload } = await dispatch(buySubscription());
-    if (payload.success)
-      await dispatch(updateUser({ user: payload.user }));
+    if (payload.success) {
+      dispatch(updateUser({ user: payload.user }));
+    }
   }
 
   useEffect(() => {
@@ -74,7 +76,7 @@ function Subscribe() {
         <Box p="4">
           <VStack textAlign={'center'} px="8" mt={'4'} spacing="8">
             <Text children={`Join pro pack and get access to all content.`} />
-            <Heading size="md" children={'₹99 Only'} />
+            <Heading size="md" children={'₹1 Only'} />
           </VStack>
 
           <Button

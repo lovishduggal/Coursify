@@ -12,6 +12,8 @@ import {
 } from '@chakra-ui/react';
 import cursor from '../../../assets/images/cursor.png';
 import Sidebar from '../Sidebar';
+import { useDispatch } from 'react-redux';
+import { createCourse } from '../../../redux/slices/courseSlice';
 
 const categories = [
   'Web development',
@@ -29,6 +31,7 @@ function CreateCourse() {
   const [category, setCategory] = useState('');
   const [image, setImage] = useState('');
   const [imagePrev, setImagePrev] = useState('');
+  const dispatch = useDispatch();
 
   function changeImageHandler(e) {
     const file = e.target.files[0];
@@ -41,6 +44,17 @@ function CreateCourse() {
       setImage(file);
     };
   }
+
+  function submitHandler(e) {
+    e.preventDefault();
+    const form = new FormData();
+    form.append('title', title);
+    form.append('description', description);
+    form.append('category', category);
+    form.append('createdBy', createdBy);
+    form.append('file', image);
+    dispatch(createCourse(form));
+  }
   return (
     <Grid
       css={{
@@ -50,7 +64,7 @@ function CreateCourse() {
       templateColumns={['1fr', '5fr 1fr']}
     >
       <Container>
-        <form>
+        <form onSubmit={submitHandler}>
           <Heading
             textTransform={'uppercase'}
             children="Create Course"
@@ -86,7 +100,7 @@ function CreateCourse() {
             >
               <option value="">Category</option>
 
-              {categories.map(item => (
+              {categories?.map(item => (
                 <option key={item} value={item}>
                   {item}
                 </option>
@@ -113,11 +127,7 @@ function CreateCourse() {
             {imagePrev && (
               <Image src={imagePrev} boxSize={'64'} objectFit={'contain'} />
             )}
-            <Button
-              w="full"
-              colorScheme={'purple'}
-              type="submit"
-            >
+            <Button w="full" colorScheme={'purple'} type="submit">
               Create
             </Button>
           </VStack>
