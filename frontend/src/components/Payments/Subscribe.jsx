@@ -6,9 +6,58 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axiosInstance from '../../helpers/axiosInstance';
+import { buySubscription } from '../../redux/slices/paymentSlice';
+import logo from '../../assets/images/logo.png';
+import { updateUser } from '../../redux/slices/userSlice';
 
 function Subscribe() {
+  const dispatch = useDispatch();
+  const [key, setKey] = useState('');
+  const { subscriptionId } = useSelector(state => state.payment);
+  const { user } = useSelector(state => state.user);
+
+  async function subscribeHandler() {
+    const {
+      data: { key },
+    } = await axiosInstance.get(`/razorpaykey`);
+    console.log(key);
+    setKey(key);
+    const { payload } = await dispatch(buySubscription());
+    if (payload.success)
+      await dispatch(updateUser({ user: payload.user }));
+  }
+
+  useEffect(() => {
+    if (subscriptionId) {
+      const openPopUp = () => {
+        const options = {
+          key,
+          name: 'Coursify',
+          description: 'Get access to all premium content',
+          image: logo,
+          subscription_id: subscriptionId,
+          callback_url: 'http://localhost:3001/api/v1/paymentverification',
+          prefill: {
+            name: user.name,
+            email: user.email,
+          },
+          notes: {
+            address: 'Amristsar, Punjab',
+          },
+          theme: {
+            color: '#FFC800',
+          },
+        };
+
+        const razor = new window.Razorpay(options);
+        razor.open();
+      };
+      openPopUp();
+    }
+  }, [key, subscriptionId, user.name, user.email]);
   return (
     <Container h="90vh" p="16">
       <Heading children="Welcome" my="8" textAlign={'center'} />
@@ -28,7 +77,12 @@ function Subscribe() {
             <Heading size="md" children={'₹99 Only'} />
           </VStack>
 
-          <Button my="8" w="full" colorScheme={'yellow'}>
+          <Button
+            onClick={subscribeHandler}
+            my="8"
+            w="full"
+            colorScheme={'yellow'}
+          >
             Buy Now
           </Button>
         </Box>

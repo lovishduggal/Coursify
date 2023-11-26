@@ -2,6 +2,7 @@ import { catchAsyncError } from '../Middlewares/catchAsyncError.js';
 import { Payment } from '../Models/Payment.js';
 import { User } from '../Models/User.js';
 import { razorpay } from '../server.js';
+import crypto from 'crypto';
 
 export const buySubscription = catchAsyncError(async (req, res, next) => {
     const user = await User.findById(req.user._id);
@@ -22,6 +23,7 @@ export const buySubscription = catchAsyncError(async (req, res, next) => {
     return res.status(200).json({
         success: true,
         subscriptionId: subscription.id,
+        user,
     });
 });
 
@@ -60,17 +62,16 @@ export const paymentVerification = catchAsyncError(async (req, res, next) => {
 export const getRazorPayKey = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
         success: true,
-        key: process.env.RAZORPAY_API_KEY,
+        key: process.env.RAZORPAY_KEY_ID,
     });
 });
 
 export const cancelSubscription = catchAsyncError(async (req, res, next) => {
     const user = await User.findById(req.user._id);
     const subscriptionId = user.subscription.id;
+    console.log(user, subscriptionId);
 
     let refund = false;
-
-    await razorpay.subscriptions.cancel(subscriptionId);
 
     const payment = await Payment.findOne({
         razorpay_subscription_id: subscriptionId,
@@ -94,5 +95,6 @@ export const cancelSubscription = catchAsyncError(async (req, res, next) => {
         message: refund
             ? 'Subscription cancelled, You will receive full refund within 7 days.'
             : 'Subscription cancelled, No refund initiated as subscription was cancelled after 7 days.',
+        user,
     });
 });

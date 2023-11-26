@@ -212,7 +212,11 @@ export const removeFromPlaylist = createAsyncThunk(
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    updateUser: (state, action) => {
+      state.user = action?.payload?.user;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(login.fulfilled, (state, action) => {
@@ -240,3 +244,4 @@ const userSlice = createSlice({
   },
 });
 export default userSlice.reducer;
+export const { updateUser } = userSlice.actions;

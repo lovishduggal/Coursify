@@ -22,8 +22,13 @@ import { useState } from 'react';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { loadUser, updateProfilePicture } from '../../redux/slices/userSlice';
+import {
+  loadUser,
+  updateProfilePicture,
+  updateUser,
+} from '../../redux/slices/userSlice';
 import { removeFromPlaylist } from '../../redux/slices/userSlice';
+import { cancelSubscription } from '../../redux/slices/paymentSlice';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -38,8 +43,13 @@ const Profile = () => {
     e.preventDefault();
     const form = new FormData();
     form.append('file', image);
-    await dispatch(updateProfilePicture(form));
-    dispatch(loadUser());
+    const { payload } = await dispatch(updateProfilePicture(form));
+    if (payload?.success) dispatch(updateUser({ user: payload?.user }));
+  }
+
+  async function cancelSubscriptionHandler() {
+    const { payload } = await dispatch(cancelSubscription());
+    if (payload?.success) await dispatch(updateUser({ user: payload?.user }));
   }
 
   return (
@@ -77,7 +87,11 @@ const Profile = () => {
             <HStack>
               <Text children="Subscription" fontWeight={'bold'} />
               {user?.subscription && user?.subscription?.status === 'active' ? (
-                <Button color={'yellow.500'} variant="unstyled">
+                <Button
+                  onClick={cancelSubscriptionHandler}
+                  color={'yellow.500'}
+                  variant="unstyled"
+                >
                   Cancel Subscription
                 </Button>
               ) : (

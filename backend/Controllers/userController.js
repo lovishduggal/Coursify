@@ -73,7 +73,6 @@ export const logout = catchAsyncError(async (req, res, next) => {
 
 export const getMyProfile = catchAsyncError(async (req, res, next) => {
     const user = await User.findById(req.user._id);
-    console.log(user);
     return res.status(200).json({
         success: true,
         user,
@@ -135,6 +134,7 @@ export const updateProfilePicture = catchAsyncError(async (req, res, next) => {
     return res.status(200).json({
         success: true,
         message: 'Profile Picture Updated Successfully',
+        user,
     });
 });
 
