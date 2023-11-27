@@ -69,7 +69,7 @@ export const createCourse = createAsyncThunk(
 );
 
 export const deleteCourse = createAsyncThunk(
-  'user/admin/deletecourse',
+  'course/admin/deletecourse',
   async data => {
     const { id } = data;
     try {
@@ -89,29 +89,39 @@ export const deleteCourse = createAsyncThunk(
 );
 
 export const addLecture = createAsyncThunk(
-  'user/admin/addlecture',
+  'course/admin/addlecture',
   async data => {
     try {
-      const { id, title, description, file } = data;
-      console.log('jii', id, title, description, file);
-      const response = axiosInstance.post(
-        `/course/${id}`,
-        {
-          title,
-          description,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const { id, form } = data;
+      const response = axiosInstance.post(`/course/${id}`, form);
       toast.promise(response, {
         loading: 'Adding.....',
         success: response => {
           return response?.data?.message;
         },
         error: 'Failed to add the lecture',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
+export const deleteLecture = createAsyncThunk(
+  'course/admin/deletelecture',
+  async data => {
+    try {
+      const { courseId, lectureId } = data;
+      const response = axiosInstance.delete(
+        `/lecture?courseId=${courseId}&lectureId=${lectureId}`
+      );
+      toast.promise(response, {
+        loading: 'deleting.....',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to delete the lecture',
       });
       return (await response).data;
     } catch (error) {
@@ -139,6 +149,9 @@ const courseSlice = createSlice({
         state.courses = action?.payload?.courses;
       })
       .addCase(addLecture.fulfilled, (state, action) => {
+        state.lectures = action?.payload?.lectures;
+      })
+      .addCase(deleteLecture.fulfilled, (state, action) => {
         state.lectures = action?.payload?.lectures;
       });
   },

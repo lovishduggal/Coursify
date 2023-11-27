@@ -232,6 +232,7 @@ export const getAllUsers = catchAsyncError(async (req, res, next) => {
     return res.status(200).json({
         success: true,
         users,
+        message: 'Fetched all users successfully',
     });
 });
 
@@ -247,6 +248,7 @@ export const updateUserRole = catchAsyncError(async (req, res, next) => {
     return res.status(200).json({
         success: true,
         message: 'Role Updated',
+        users: await User.find(),
     });
 });
 
@@ -255,14 +257,13 @@ export const deleteUser = catchAsyncError(async (req, res, next) => {
     if (!user) return next(new ErrorHandler('User not found', 404));
 
     await cloudinary.v2.uploader.destroy(user.avatar.public_id);
-
-    // Cancel Subscription
-
+    
     await user.deleteOne({});
 
     return res.status(200).json({
         success: true,
         message: 'User Deleted Successfully',
+        users: await User.find(),
     });
 });
 

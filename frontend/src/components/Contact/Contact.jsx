@@ -10,11 +10,19 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { contactUs } from '../../redux/slices/miscellaneousSlice';
+import { useDispatch } from 'react-redux';
 
 function Contact() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
+
+  function submitHandler(e) {
+    e.preventDefault();
+    dispatch(contactUs({ name, email, message }));
+  }
   return (
     <Container
       h="90vh"
@@ -24,7 +32,7 @@ function Contact() {
     >
       <VStack spacing={'16'}>
         <Heading children="Contact Us"></Heading>
-        <form style={{ width: '100%' }}>
+        <form onSubmit={submitHandler} style={{ width: '100%' }}>
           <Box marginY={'4'}>
             <FormLabel htmlFor="name" children="Name" />
             <Input

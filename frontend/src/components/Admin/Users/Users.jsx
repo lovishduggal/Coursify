@@ -13,24 +13,30 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Sidebar from '../Sidebar';
 import cursor from '../../../assets/images/cursor.png';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  deleteUser,
+  getAllUsers,
+  updateUserRole,
+} from '../../../redux/slices/userSlice';
 function Users() {
-  const users = [
-    {
-      _id: '1',
-      name: 'lovish',
-      email: 'lovishduggal11@gmail.com',
-      role: 'user',
-      subscription: {
-        status: 'active',
-      },
-    },
-  ];
-  const updateHandler = userId => {};
-  const deleteButtonHandler = userId => {};
+  const dispatch = useDispatch();
+  const { users } = useSelector(state => state.user);
+
+  function updateHandler(id) {
+    dispatch(updateUserRole({ id }));
+  }
+  function deleteButtonHandler(id) {
+    dispatch(deleteUser({ id }));
+  }
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
   return (
     <Grid
       css={{

@@ -97,5 +97,6 @@ export const getDashboardStats = catchAsyncError(async (req, res, next) => {
         subscriptionProfit,
         viewsProfit,
         usersProfit,
+        message: 'Stats feched successfully',
     });
 });

@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addLecture,
   deleteCourse,
+  deleteLecture,
   getAllCourses,
   getCourseLectures,
 } from '../../../redux/slices/courseSlice';
@@ -54,10 +55,16 @@ function AdminCourses() {
   async function deleteButtonHandler(id) {
     await dispatch(deleteCourse({ id }));
   }
-  function deleteLectureButtonHandler(courseId, lectureId) {}
-  async function addLectureHandler(e, id, title, description, video) {
+  function deleteLectureButtonHandler(courseId, lectureId) {
+    dispatch(deleteLecture({courseId, lectureId}))
+  }
+  function addLectureHandler(e, id, title, description, video) {
     e.preventDefault();
-    await dispatch(addLecture({ id, title, description, file: video }));
+    const form = new FormData();
+    form.append('title', title);
+    form.append('description', description);
+    form.append('file', video);
+    dispatch(addLecture({ id, form }));
   }
   useEffect(() => {
     (async () => {

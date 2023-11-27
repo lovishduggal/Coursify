@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 
 const initialState = {
   user: {},
+  users: [],
   isAuthenticated: false,
 };
 
@@ -209,6 +210,64 @@ export const removeFromPlaylist = createAsyncThunk(
   }
 );
 
+export const getAllUsers = createAsyncThunk(
+  'user/admin/getallusers',
+  async () => {
+    try {
+      const response = axiosInstance.get(`/admin/users`);
+      toast.promise(response, {
+        loading: 'Fetching the all users',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to fetch all users',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
+export const updateUserRole = createAsyncThunk(
+  'user/admin/updateuserrole',
+  async data => {
+    try {
+      const { id } = data;
+      const response = axiosInstance.put(`/admin/user/${id}`);
+      toast.promise(response, {
+        loading: 'Updating...',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to update the user role',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  'user/admin/deleteuser',
+  async data => {
+    try {
+      const { id } = data;
+      const response = axiosInstance.delete(`/admin/user/${id}`);
+      toast.promise(response, {
+        loading: 'deleting...',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to delete the user',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
 
 
 const userSlice = createSlice({
@@ -242,6 +301,15 @@ const userSlice = createSlice({
       })
       .addCase(removeFromPlaylist.fulfilled, (state, action) => {
         state.user = action?.payload?.user;
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.users = action?.payload?.users;
+      })
+      .addCase(updateUserRole.fulfilled, (state, action) => {
+        state.users = action?.payload?.users;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.users = action?.payload?.users;
       });
   },
 });
