@@ -9,15 +9,26 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axiosInstance from '../../helpers/axiosInstance';
-import { buySubscription } from '../../redux/slices/paymentSlice';
+import { useNavigate } from 'react-router-dom';
+import {
+  buySubscription,
+  verifyUserPayment,
+} from '../../redux/slices/paymentSlice';
 import logo from '../../assets/images/logo.png';
 import { updateUser } from '../../redux/slices/userSlice';
+import toast from 'react-hot-toast';
 
 function Subscribe() {
   const dispatch = useDispatch();
   const [key, setKey] = useState('');
   const { subscriptionId } = useSelector(state => state.payment);
   const { user } = useSelector(state => state.user);
+  const navigate = useNavigate();
+  const paymentDetails = {
+    razorpay_payment_id: '',
+    razorpay_subscription_id: '',
+    razorpay_signature: '',
+  };
 
   async function subscribeHandler() {
     const {
@@ -41,7 +52,20 @@ function Subscribe() {
           description: 'Get access to all premium content',
           image: logo,
           subscription_id: subscriptionId,
-          callback_url: 'http://localhost:3001/api/v1/paymentverification',
+          handler: async function (response) {
+            paymentDetails.razorpay_payment_id = response.razorpay_payment_id;
+            paymentDetails.razorpay_subscription_id =
+              response.razorpay_subscription_id;
+            paymentDetails.razorpay_signature = response.razorpay_signature;
+            const { payload } = await dispatch(
+              verifyUserPayment(paymentDetails)
+            );
+            payload?.success
+              ? navigate(
+                  `/paymentsuccess?reference=${paymentDetails.razorpay_payment_id}`
+                )
+              : navigate('/paymentfail');
+          },
           prefill: {
             name: user.name,
             email: user.email,

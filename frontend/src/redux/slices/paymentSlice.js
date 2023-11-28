@@ -44,13 +44,32 @@ export const cancelSubscription = createAsyncThunk(
   }
 );
 
+export const verifyUserPayment = createAsyncThunk(
+  'payment/verification',
+  async data => {
+    try {
+      const response = axiosInstance.post(`/paymentverification`, data);
+      toast.promise(response, {
+        loading: 'Verifying....',
+        success: response => {
+          return response?.data?.message;
+        },
+        error: 'Failed to Verify',
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+);
+
 const paymentSlice = createSlice({
   name: 'payment',
   initialState,
   reducers: {},
   extraReducers: builder => {
     builder.addCase(buySubscription.fulfilled, (state, action) => {
-      state.subscriptionId = action.payload.subscriptionId;
+      state.subscriptionId = action?.payload?.subscriptionId;
     });
   },
 });
