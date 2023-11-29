@@ -9,9 +9,9 @@ function ChangePassword() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
-  function submitHandler(e) {
+  async function submitHandler(e) {
     e.preventDefault();
-    dispatch(changePassword({ oldPassword, newPassword }));
+    await dispatch(changePassword({ oldPassword, newPassword }));
     dispatch(loadUser());
     navigate('/profile');
   }

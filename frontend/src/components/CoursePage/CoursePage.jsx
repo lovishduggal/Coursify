@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Container,
-  Grid,
-  Heading,
-  Spinner,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
-import intro from '../../assets/videos/intro.mp4';
+import { Box, Container, Grid, Heading, Text, VStack } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { getCourseLectures } from '../../redux/slices/courseSlice';
 function CoursePage() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { id } = useParams();
   const [lectureNumber, setLectureNumber] = useState(0);
   const { lectures } = useSelector(state => state.course);

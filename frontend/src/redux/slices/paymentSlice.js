@@ -68,9 +68,13 @@ const paymentSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(buySubscription.fulfilled, (state, action) => {
-      state.subscriptionId = action?.payload?.subscriptionId;
-    });
+    builder
+      .addCase(buySubscription.fulfilled, (state, action) => {
+        state.subscriptionId = action?.payload?.subscriptionId;
+      })
+      .addCase(cancelSubscription.fulfilled, (state, action) => {
+        state.subscriptionId = '';
+      });
   },
 });
 export default paymentSlice.reducer;

@@ -16,7 +16,6 @@ import {
 } from '../../redux/slices/paymentSlice';
 import logo from '../../assets/images/logo.png';
 import { updateUser } from '../../redux/slices/userSlice';
-import toast from 'react-hot-toast';
 
 function Subscribe() {
   const dispatch = useDispatch();
@@ -24,11 +23,6 @@ function Subscribe() {
   const { subscriptionId } = useSelector(state => state.payment);
   const { user } = useSelector(state => state.user);
   const navigate = useNavigate();
-  const paymentDetails = {
-    razorpay_payment_id: '',
-    razorpay_subscription_id: '',
-    razorpay_signature: '',
-  };
 
   async function subscribeHandler() {
     const {
@@ -44,6 +38,11 @@ function Subscribe() {
   }
 
   useEffect(() => {
+    const paymentDetails = {
+      razorpay_payment_id: '',
+      razorpay_subscription_id: '',
+      razorpay_signature: '',
+    };
     if (subscriptionId) {
       const openPopUp = () => {
         const options = {
@@ -60,15 +59,18 @@ function Subscribe() {
             const { payload } = await dispatch(
               verifyUserPayment(paymentDetails)
             );
-            payload?.success
-              ? navigate(
-                  `/paymentsuccess?reference=${paymentDetails.razorpay_payment_id}`
-                )
-              : navigate('/paymentfail');
+            if (payload?.success) {
+              await dispatch(updateUser({ user: payload?.user }));
+              navigate(
+                `/paymentsuccess?reference=${paymentDetails.razorpay_payment_id}`
+              );
+            } else {
+              navigate('/paymentfail');
+            }
           },
           prefill: {
-            name: user.name,
-            email: user.email,
+            name: user?.name,
+            email: user?.email,
           },
           notes: {
             address: 'Amristsar, Punjab',
@@ -83,7 +85,7 @@ function Subscribe() {
       };
       openPopUp();
     }
-  }, [key, subscriptionId, user.name, user.email]);
+  }, [key, subscriptionId, dispatch, navigate, user?.name, user?.email]);
   return (
     <Container h="90vh" p="16">
       <Heading children="Welcome" my="8" textAlign={'center'} />

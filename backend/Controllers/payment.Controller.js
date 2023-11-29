@@ -57,6 +57,7 @@ export const paymentVerification = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: 'Payment verified successfully',
+        user,
     });
 });
 
@@ -70,7 +71,6 @@ export const getRazorPayKey = catchAsyncError(async (req, res, next) => {
 export const cancelSubscription = catchAsyncError(async (req, res, next) => {
     const user = await User.findById(req.user._id);
     const subscriptionId = user.subscription.id;
-    console.log(user, subscriptionId);
 
     let refund = false;
 

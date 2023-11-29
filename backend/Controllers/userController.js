@@ -257,7 +257,7 @@ export const deleteUser = catchAsyncError(async (req, res, next) => {
     if (!user) return next(new ErrorHandler('User not found', 404));
 
     await cloudinary.v2.uploader.destroy(user.avatar.public_id);
-    
+
     await user.deleteOne({});
 
     return res.status(200).json({
@@ -277,7 +277,7 @@ export const deleteMyProfile = catchAsyncError(async (req, res, next) => {
 
     res.status(200)
         .cookie('token', null, {
-            expires: new Date(Date.now()),
+            expires: new Date(0),
         })
         .json({
             success: true,

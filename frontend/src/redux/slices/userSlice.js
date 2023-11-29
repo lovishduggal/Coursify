@@ -269,7 +269,6 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -282,7 +281,7 @@ const userSlice = createSlice({
     builder
       .addCase(login.fulfilled, (state, action) => {
         state.user = action?.payload?.user;
-        state.isAuthenticated = true;
+        if (action?.payload?.success) state.isAuthenticated = true;
       })
       .addCase(loadUser.fulfilled, (state, action) => {
         state.user = action?.payload?.user;
