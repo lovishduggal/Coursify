@@ -12,7 +12,7 @@ The Learning Management System (LMS) is a comprehensive web application designed
 
 # **Technology Stack:**
 
-- **Frontend:**React.js for a responsive and dynamic user interface. Chakra UI for built-in components.
+- **Frontend:** React.js for a responsive and dynamic user interface. Chakra UI for built-in components.
 - **Backend:** Node.js and Express.js for efficient server-side development.
 - **Database:** MongoDB for scalable and flexible data storage.
 - **Authentication:** Secure user authentication using JWT (JSON Web Tokens).
