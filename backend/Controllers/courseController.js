@@ -121,6 +121,7 @@ export const deleteCourse = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: 'Course Deleted Successfully',
+        courses: await Course.find(),
     });
 });
 

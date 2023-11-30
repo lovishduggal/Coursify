@@ -24,11 +24,16 @@ function Register() {
   function changeImageHandler(e) {
     const file = e.target.files[0];
     const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImagePrev(reader.result);
-      setImage(file);
-    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+
+      reader.onloadend = () => {
+        setImagePrev(reader.result);
+        return setImage(file);
+      };
+    }
+    return;
   }
 
   function submitHandler(e) {

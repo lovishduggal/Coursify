@@ -173,12 +173,15 @@ function ChangePhotoBox({
     const file = e.target.files[0];
     const reader = new FileReader();
 
-    reader.readAsDataURL(file);
+    if (file) {
+      reader.readAsDataURL(file);
 
-    reader.onloadend = () => {
-      setImagePrev(reader.result);
-      setImage(file);
-    };
+      reader.onloadend = () => {
+        setImagePrev(reader.result);
+        return setImage(file);
+      };
+    }
+    return;
   }
 
   function closeHandler() {

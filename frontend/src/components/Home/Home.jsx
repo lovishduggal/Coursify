@@ -8,7 +8,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import './home.css';
 import { Link } from 'react-router-dom';
 import bg from '../../assets/images/bg.png';
@@ -22,8 +22,8 @@ function Home() {
     <section className="home">
       <div className="container">
         <Stack
-          direction={['column', 'row']}
-          height="100vh"
+          direction={['column', 'column', 'column', 'row']}
+          height="90vh"
           justifyContent={['center', 'space-between']}
           alignItems="center"
           spacing={['16', '56']}
@@ -32,6 +32,7 @@ function Home() {
             width={'full'}
             alignItems={['center', 'flex-end']}
             spacing="8"
+            height={'auto'}
           >
             {' '}
             <Heading
@@ -55,6 +56,7 @@ function Home() {
             boxSize={'md'}
             src={bg}
             objectFit={'contain'}
+            height={'auto'}
           />
         </Stack>
       </div>

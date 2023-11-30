@@ -36,12 +36,14 @@ function CourseModal({
     const file = e.target.files[0];
     const reader = new FileReader();
 
-    reader.readAsDataURL(file);
-
-    reader.onloadend = () => {
-      setVideoPrev(reader.result);
-      setVideo(file);
-    };
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setVideoPrev(reader.result);
+        return setVideo(file);
+      };
+    }
+    return;
   }
 
   function handleClose() {

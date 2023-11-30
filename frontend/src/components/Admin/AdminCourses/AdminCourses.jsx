@@ -27,6 +27,7 @@ import {
   deleteLecture,
   getAllCourses,
   getCourseLectures,
+  updateCourses,
 } from '../../../redux/slices/courseSlice';
 import { useEffect } from 'react';
 function AdminCourses() {
@@ -35,17 +36,7 @@ function AdminCourses() {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [courseId, setCourseId] = useState('');
   const [courseTitle, setCourseTitle] = useState('');
-  const users = [
-    {
-      _id: '1',
-      name: 'lovish',
-      email: 'lovishduggal11@gmail.com',
-      role: 'user',
-      subscription: {
-        status: 'active',
-      },
-    },
-  ];
+
   async function coureDetailsHandler(id, title) {
     await dispatch(getCourseLectures({ id }));
     onOpen();
@@ -56,7 +47,7 @@ function AdminCourses() {
     await dispatch(deleteCourse({ id }));
   }
   function deleteLectureButtonHandler(courseId, lectureId) {
-    dispatch(deleteLecture({courseId, lectureId}))
+    dispatch(deleteLecture({ courseId, lectureId }));
   }
   function addLectureHandler(e, id, title, description, video) {
     e.preventDefault();
@@ -102,7 +93,7 @@ function AdminCourses() {
               </Tr>
             </Thead>
             <Tbody>
-              {users &&
+              {courses &&
                 courses?.map(item => (
                   <Row
                     coureDetailsHandler={coureDetailsHandler}

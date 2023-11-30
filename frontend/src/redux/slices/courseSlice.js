@@ -157,3 +157,4 @@ const courseSlice = createSlice({
   },
 });
 export default courseSlice.reducer;
+export const { updateCourses } = courseSlice.actions;

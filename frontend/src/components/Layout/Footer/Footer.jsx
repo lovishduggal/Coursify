@@ -8,7 +8,7 @@ import {
 
 function Footer() {
   return (
-    <Box padding={'4'} bg={'blackAlpha.900'} minH={'10vh'}>
+    <Box padding={'4'} bg={'blackAlpha.900'} minH={'10vh'} w={'100%'}>
       <Stack direction={['column', 'row']}>
         <VStack alignItems={['center', 'flex-start']} width={'full'}>
           <Heading children="All Rights Resereved" color={'white'}></Heading>
