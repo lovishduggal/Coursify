@@ -16,14 +16,8 @@ import { CgGoogle, CgYoutube } from 'react-icons/cg';
 import { SiCoursera } from 'react-icons/si';
 import { DiAws } from 'react-icons/di';
 import intro from '../../assets/videos/intro.mp4';
-import { useDispatch } from 'react-redux';
-import { loadUser } from '../../redux/slices/userSlice';
 
 function Home() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(loadUser());
-  }, [dispatch]);
   return (
     <section className="home">
       <div className="container">
