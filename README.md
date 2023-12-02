@@ -1,4 +1,4 @@
-# Coursify-Pratice-Project:
+# Coursify-Practice-Project:
 
 # **Project Overview: Learning Management System (LMS)**
 
